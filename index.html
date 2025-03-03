@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5ED - תוכניות אימון מקצועיות</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Dark theme (default) */
+            --primary: #FF9F0A;
+            --primary-dark: #FF8900;
+            --background: #000000;
+            --surface: rgba(255, 255, 255, 0.05);
+            --text: #FFFFFF;
+            --text-secondary: #86868B;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, #FFB23F 100%);
+            --gradient-2: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            --transition-duration: 800ms;
+            --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        :root[data-theme="light"] {
+            --primary: #FF9F0A;
+            --primary-dark: #FF8900;
+            --background: #FFFFFF;
+            --surface: rgba(0, 0, 0, 0.05);
+            --text: #1D1D1F;
+            --text-secondary: #6E6E73;
+            --gradient-1: linear-gradient(135deg, var(--primary) 0%, #FFB23F 100%);
+            --gradient-2: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+            transition: background-color var(--transition-duration) var(--transition-timing),
+                        color var(--transition-duration) var(--transition-timing),
+                        border-color var(--transition-duration) var(--transition-timing),
+                        box-shadow var(--transition-duration) var(--transition-timing),
+                        transform var(--transition-duration) var(--transition-timing),
+                        opacity var(--transition-duration) var(--transition-timing);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+            font-feature-settings: "kern" 1;
+            -webkit-font-smoothing: antialiased;
+            direction: rtl;
+            text-align: right;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(255, 159, 10, 0.1) 0%, transparent 70%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            max-width: 800px;
+            direction: rtl;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 30px rgba(255, 159, 10, 0.2);
+        }
+
+        .hero h1 .letter {
+            display: inline-block;
+            opacity: 0;
+            transform-origin: center;
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(255, 159, 10, 0.3);
+        }
+
+        .hero h1 .letter.animated {
+            display: none;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 20px rgba(255, 159, 10, 0.2);
+            }
+            50% {
+                text-shadow: 0 0 30px rgba(255, 159, 10, 0.4);
+            }
+            100% {
+                text-shadow: 0 0 20px rgba(255, 159, 10, 0.2);
+            }
+        }
+
+        .hero h1 .letter.space {
+            width: 0.5em;
+        }
+
+        .hero h1::after {
+            display: none;
+        }
+
+        .hero h1 .char {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px) rotateX(90deg);
+            transform-origin: center center;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 2.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--gradient-2);
+            letter-spacing: 0;
+            box-shadow: 0 5px 15px rgba(255, 159, 10, 0.3);
+            z-index: 1;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-1);
+            border-radius: 50px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 159, 10, 0.4);
+        }
+
+        .stats {
+            background-color: var(--background);
+            padding: 3rem 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .features {
+            background-color: var(--background);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .section-title h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--primary), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-title p {
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.25rem;
+            font-weight: 400;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 2.5rem;
+            border-radius: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            text-align: right;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-left: 0;
+            margin-right: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonials {
+            background-color: var(--background);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            text-align: right;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-align: right;
+            flex-direction: row-reverse;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-left: 1rem;
+            margin-right: 0;
+        }
+
+        .grid-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(20, 1fr);
+            gap: 1px;
+            opacity: 0.1;
+            z-index: 1;
+            transform: scaleX(-1);
+        }
+
+        .grid-item {
+            background: var(--primary);
+            opacity: 0;
+        }
+
+        /* Process Section Styles */
+        .process {
+            background-color: var(--background);
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .process-step {
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(20px);
+            transform-origin: center;
+            perspective: 1000px;
+            text-align: right;
+        }
+
+        .process-step:hover {
+            transform: translateY(-5px) scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .step-number {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            opacity: 0.8;
+            display: inline-block;
+        }
+
+        .step-number::after {
+            content: '';
+            position: absolute;
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            opacity: 0.15;
+            border-radius: 50%;
+            top: 50%;
+            right: -12px;
+            transform: translateY(-50%);
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .process-step h3 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .process-step p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-top: 1rem;
+        }
+
+        /* Add a subtle separator between number and content */
+        .process-step::before {
+            content: '';
+            position: absolute;
+            top: 5rem;
+            right: 1.5rem;
+            width: 40px;
+            height: 2px;
+            background: var(--primary);
+            opacity: 0.3;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+
+        .process-step:hover::before {
+            transform: scaleX(1);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .theme-toggle i {
+            font-size: 1.5rem;
+            color: var(--text);
+            transition: transform 0.5s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle:hover i {
+            transform: rotate(180deg);
+        }
+
+        /* Adjust card backgrounds for light mode */
+        :root[data-theme="light"] .feature-card,
+        :root[data-theme="light"] .testimonial-card,
+        :root[data-theme="light"] .process-step {
+            background: var(--surface);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        :root[data-theme="light"] .grid-bg {
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle" aria-label="החלף ערכת נושא">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <section class="hero">
+        <div class="grid-bg" id="heroGrid"></div>
+        <div class="hero-content">
+            <h1>הגיע הזמן להגשים את הפוטנציאל שלך</h1>
+            <p>חווה תוכניות אימון מותאמות אישית המתוכננות להעלות את הביצועים שלך ולהשיג את המטרות האתלטיות שלך</p>
+            <a href="create-program.html" class="cta-button">התחל להתאמן עכשיו</a>
+        </div>
+    </section>
+
+    <section class="process">
+        <div class="grid-bg" id="processGrid"></div>
+        <div class="container">
+            <div class="section-title">
+                <h2>איך זה עובד</h2>
+                <p>המסע שלך לשיא הביצועים בארבעה שלבים פשוטים</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3>הערכה ראשונית</h3>
+                    <p>השלם הערכה מקיפה של רמת הכושר הנוכחית שלך, המטרות וכל המגבלות באמצעות מערכת ההערכה מבוססת הבינה המלאכותית שלנו.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3>תכנון התוכנית</h3>
+                    <p>הבינה המלאכותית שלנו מנתחת את הנתונים שלך ליצירת תוכנית אימונים מותאמת אישית המאזנת באופן אופטימלי בין עצימות, התאוששות והתקדמות.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3>סקירת מומחה</h3>
+                    <p>מאמנים מקצועיים סוקרים ומכווננים את התוכנית שלך, מבטיחים שהיא מתואמת בצורה מושלמת עם המטרות והיכולות שלך.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3>התאמה דינמית</h3>
+                    <p>התוכנית שלך מתפתחת באופן מתמיד בהתבסס על נתוני הביצועים והמשוב שלך, מבטיחה תוצאות אופטימליות לאורך כל המסע שלך.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">+10,000</div>
+                    <div class="stat-label">ספורטאים מאומנים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">אחוז הצלחה</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">+50</div>
+                    <div class="stat-label">מאמנים מומחים</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">תמיכה זמינה</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="grid-bg" id="featuresGrid"></div>
+        <div class="container">
+            <div class="section-title">
+                <h2>למה לבחור ב-5ED</h2>
+                <p>גלה את היתרונות של שיטת האימון המבוססת מדעית שלנו</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3>תוכניות מותאמות אישית</h3>
+                    <p>תוכניות אימון מותאמות למטרות הספציפיות שלך ולרמת הכושר הנוכחית שלך</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>מעקב ביצועים</h3>
+                    <p>אנליטיקה מתקדמת למעקב אחר ההתקדמות שלך ואופטימיזציה של האימון</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3>מופעל על ידי בינה מלאכותית</h3>
+                    <p>אלגוריתמים חכמים המתאימים את התוכנית שלך בהתבסס על הביצועים שלך</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>סיפורי הצלחה</h2>
+                <p>שמע מספורטאים שהפכו את הביצועים שלהם עם 5ED</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"5ED שינתה לחלוטין את גישת האימון שלי. התוכניות המותאמות אישית עזרו לי להשיג את המטרות שלי מהר יותר ממה שחשבתי אפשרי."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="דור ברנר" class="author-avatar">
+                        <div>
+                            <strong>דרור ברנר</strong><br>
+                            <span style="color: var(--text-secondary)">ספורטאי מקצועי</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"ההתאמה החכמה של התוכנית שומרת עלי מאותגר תוך מניעת שחיקה. זה כמו שיש לי מאמן אישי שיודע בדיוק מה אני צריך."</p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="שרה ל." class="author-avatar">
+                        <div>
+                            <strong>שרה לוי</strong><br>
+                            <span style="color: var(--text-secondary)">רצה תחרותית</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Create grid backgrounds
+        function createGrid(containerId, rows, cols) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < rows * cols; i++) {
+                const div = document.createElement('div');
+                div.classList.add('grid-item');
+                container.appendChild(div);
+            }
+            return container.children;
+        }
+
+        const heroGridItems = createGrid('heroGrid', 20, 20);
+        const featuresGridItems = createGrid('featuresGrid', 20, 20);
+        const processGridItems = createGrid('processGrid', 20, 20);
+
+        // Enhanced hero animations
+        const heroTitle = document.querySelector('.hero h1');
+        const text = heroTitle.textContent;
+        heroTitle.innerHTML = text.split('').map(char => 
+            `<span class="letter">${char === ' ' ? '&nbsp;' : char}</span>`
+        ).join('');
+
+        // Create the animation timeline
+        const timeline = anime.timeline({
+            easing: 'easeOutElastic(1, .8)',
+        });
+
+        timeline.add({
+            targets: '.hero h1 .letter',
+            translateY: [-100, 0],
+            translateZ: 0,
+            opacity: [0, 1],
+            scale: [0, 1],
+            rotate: [30, 0],
+            duration: 1500,
+            delay: (el, i) => i * 70,
+            endDelay: 1000,
+            easing: 'easeOutExpo',
+            complete: () => {
+                anime({
+                    targets: '.hero h1',
+                    keyframes: [
+                        { textShadow: '0 0 20px rgba(255, 159, 10, 0.2)' },
+                        { textShadow: '0 0 30px rgba(255, 159, 10, 0.4)' },
+                        { textShadow: '0 0 20px rgba(255, 159, 10, 0.2)' }
+                    ],
+                    duration: 3000,
+                    loop: true,
+                    easing: 'easeInOutSine'
+                });
+            }
+        })
+        .add({
+            targets: '.hero p',
+            opacity: [0, 1],
+            translateY: [30, 0],
+            duration: 1000,
+            rotateX: [90, 0],
+        }, '-=1000')
+        .add({
+            targets: '.cta-button',
+            opacity: [0, 1],
+            translateY: [20, 0],
+            scale: [0.9, 1],
+            duration: 1000,
+            rotateX: [90, 0],
+        }, '-=800');
+
+        // Add a continuous floating animation to the letters
+        anime({
+            targets: '.hero h1 .letter',
+            translateY: [-2, 2],
+            rotate: [-1, 1],
+            scale: [0.98, 1.02],
+            duration: 2000,
+            loop: true,
+            direction: 'alternate',
+            delay: (el, i) => i * 50,
+            easing: 'easeInOutQuad'
+        });
+
+        // Animate grid backgrounds
+        function animateGrid(targets) {
+            anime({
+                targets: targets,
+                opacity: [0, 0.2],
+                scale: [0.5, 1],
+                delay: anime.stagger(100, {
+                    grid: [20, 20],
+                    from: 'center',
+                    direction: 'reverse'
+                }),
+                duration: 800,
+                easing: 'easeOutQuad'
+            });
+        }
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.id === 'heroGrid') {
+                        animateGrid(heroGridItems);
+                    } else if (entry.target.id === 'featuresGrid') {
+                        animateGrid(featuresGridItems);
+                    } else if (entry.target.id === 'processGrid') {
+                        animateGrid(processGridItems);
+                    } else if (entry.target.classList.contains('stats-grid')) {
+                        anime({
+                            targets: '.stat-item',
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 800,
+                            delay: anime.stagger(100),
+                            easing: 'easeOutExpo'
+                        });
+                    } else if (entry.target.classList.contains('features-grid')) {
+                        anime({
+                            targets: '.feature-card',
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 800,
+                            delay: anime.stagger(100),
+                            easing: 'easeOutExpo'
+                        });
+                    } else if (entry.target.classList.contains('testimonial-grid')) {
+                        anime({
+                            targets: '.testimonial-card',
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 800,
+                            delay: anime.stagger(100),
+                            easing: 'easeOutExpo'
+                        });
+                    } else if (entry.target.classList.contains('process-steps')) {
+                        anime({
+                            targets: '.process-step',
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 800,
+                            delay: anime.stagger(150),
+                            easing: 'easeOutExpo'
+                        });
+                    } else if (entry.target.classList.contains('section-title')) {
+                        anime({
+                            targets: entry.target,
+                            opacity: [0, 1],
+                            translateY: [20, 0],
+                            duration: 800,
+                            easing: 'easeOutExpo'
+                        });
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.section-title, .stats-grid, .features-grid, .testimonial-grid, .process-steps, #heroGrid, #featuresGrid, #processGrid').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover animation for feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                anime({
+                    targets: card.querySelector('.feature-icon'),
+                    scale: [1, 1.2],
+                    rotate: [0, 15],
+                    duration: 500,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            });
+
+            card.addEventListener('mouseleave', () => {
+                anime({
+                    targets: card.querySelector('.feature-icon'),
+                    scale: [1.2, 1],
+                    rotate: [15, 0],
+                    duration: 500,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            });
+        });
+
+        // Enhanced process step animations
+        const processStepObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const step = entry.target;
+                    const number = step.querySelector('.step-number');
+                    const title = step.querySelector('h3');
+                    const text = step.querySelector('p');
+
+                    anime.timeline({
+                        easing: 'easeOutExpo'
+                    })
+                    .add({
+                        targets: step,
+                        opacity: [0, 1],
+                        translateY: [50, 0],
+                        rotateX: [20, 0],
+                        duration: 800,
+                    })
+                    .add({
+                        targets: number,
+                        scale: [0, 1],
+                        rotate: [45, 0],
+                        duration: 600,
+                    }, '-=600')
+                    .add({
+                        targets: [title, text],
+                        opacity: [0, 1],
+                        translateX: [-30, 0],
+                        duration: 600,
+                        delay: anime.stagger(100)
+                    }, '-=400');
+
+                    processStepObserver.unobserve(step);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        document.querySelectorAll('.process-step').forEach(step => {
+            processStepObserver.observe(step);
+        });
+
+        // Enhanced hover animations for process steps
+        document.querySelectorAll('.process-step').forEach(step => {
+            step.addEventListener('mouseenter', () => {
+                anime({
+                    targets: step,
+                    scale: 1.02,
+                    rotateY: [-2, 2],
+                    duration: 800,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+
+                anime({
+                    targets: step.querySelector('.step-number'),
+                    scale: 1.1,
+                    translateX: 5,
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            });
+
+            step.addEventListener('mouseleave', () => {
+                anime({
+                    targets: step,
+                    scale: 1,
+                    rotateY: 0,
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+
+                anime({
+                    targets: step.querySelector('.step-number'),
+                    scale: 1,
+                    translateX: 0,
+                    duration: 600,
+                    easing: 'easeOutElastic(1, .8)'
+                });
+            });
+        });
+
+        // Enhanced grid background animation
+        anime({
+            targets: '.grid-item',
+            scale: [
+                {value: 0.5, duration: 500, easing: 'easeInOutQuad'},
+                {value: 1, duration: 500, easing: 'easeInOutQuad'}
+            ],
+            opacity: [
+                {value: 0.1, duration: 500, easing: 'easeInOutQuad'},
+                {value: 0.3, duration: 500, easing: 'easeInOutQuad'}
+            ],
+            delay: anime.stagger(100, {
+                grid: [20, 20],
+                from: 'center'
+            }),
+            loop: true,
+            direction: 'alternate'
+        });
+
+        // Theme switching functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const root = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            // Create a timeline for synchronized animations
+            const timeline = anime.timeline({
+                duration: 800,
+                easing: 'easeInOutQuad'
+            });
+
+            // Animate the icon
+            timeline.add({
+                targets: icon,
+                rotate: '+=180',
+                scale: [1, 0.5, 1],
+                duration: 800,
+                easing: 'easeInOutQuad',
+                complete: () => {
+                    icon.classList.toggle('fa-moon');
+                    icon.classList.toggle('fa-sun');
+                }
+            });
+
+            // Add a small delay before theme change for smoother transition
+            setTimeout(() => {
+                root.setAttribute('data-theme', newTheme);
+            }, 100);
+
+            // Animate all cards and sections
+            timeline.add({
+                targets: [
+                    '.feature-card', 
+                    '.testimonial-card', 
+                    '.process-step',
+                    '.stats',
+                    '.testimonials',
+                    '.process'
+                ],
+                opacity: [1, 0.8, 1],
+                scale: [1, 0.99, 1],
+                duration: 800,
+                easing: 'easeInOutQuad'
+            }, '-=600');
+
+            // Animate text elements
+            timeline.add({
+                targets: [
+                    'h1', 'h2', 'h3', 'p', 
+                    '.stat-number', 
+                    '.stat-label',
+                    '.step-number'
+                ],
+                opacity: [1, 0.7, 1],
+                duration: 800,
+                easing: 'easeInOutQuad'
+            }, '-=800');
+        });
+    </script>
+</body>
+</html> 
